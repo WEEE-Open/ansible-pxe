@@ -1,0 +1,84 @@
+default menu.c32
+prompt 0
+timeout 600
+
+# Light "theme":
+#MENU COLOR border       34;47
+#MENU COLOR title        30;47
+#MENU COLOR sel          1;37;44
+#MENU COLOR unsel        30;47
+#MENU COLOR disabled     30;47
+#MENU COLOR screen       30;47
+#MENU COLOR help         30;47
+#MENU COLOR timeout_msg  30;47
+#MENU COLOR timeout      1;30;47
+#MENU COLOR tabmsg       1;30;47
+
+# Dark "theme":
+MENU COLOR border       34;40
+MENU COLOR title        1;37;40
+MENU COLOR sel          1;37;44
+MENU COLOR unsel        37;40
+MENU COLOR disabled     37;40
+MENU COLOR screen       37;40
+MENU COLOR help         37;40
+MENU COLOR timeout_msg  37;40
+MENU COLOR timeout      1;37;40
+MENU COLOR tabmsg 37;40
+
+MENU TITLE {{ name_server }} PXE Menu
+
+LABEL xubuntu1804x64OEM
+	MENU LABEL Xubuntu 18.04 x64 OEM
+	KERNEL nfs/xubuntu1804x64/casper/vmlinuz
+	APPEND initrd=nfs/xubuntu1804x64/casper/initrd.lz boot=casper netboot=nfs nfsroot=192.168.2.4:/tftpboot/nfs/xubuntu1804x64 --- debian-installer/language=it keyboard-configuration/layoutcode?=it oem-config/enable=true
+
+LABEL xubuntu1804i386OEM
+	MENU LABEL Xubuntu 18.04 i386 OEM
+	KERNEL nfs/xubuntu1804i386/casper/vmlinuz
+	APPEND initrd=nfs/xubuntu1804i386/casper/initrd.lz boot=casper netboot=nfs nfsroot=192.168.2.4:/tftpboot/nfs/xubuntu1804i386 --- debian-installer/language=it keyboard-configuration/layoutcode?=it oem-config/enable=true
+
+LABEL xubuntu1804x64
+	MENU LABEL Xubuntu 18.04 x64
+	KERNEL nfs/xubuntu1804x64/casper/vmlinuz
+	APPEND initrd=nfs/xubuntu1804x64/casper/initrd.lz boot=casper netboot=nfs nfsroot=192.168.2.4:/tftpboot/nfs/xubuntu1804x64
+
+LABEL xubuntu1804i386
+	MENU LABEL Xubuntu 18.04 i386
+	KERNEL nfs/xubuntu1804i386/casper/vmlinuz
+	APPEND initrd=nfs/xubuntu1804i386/casper/initrd.lz boot=casper netboot=nfs nfsroot=192.168.2.4:/tftpboot/nfs/xubuntu1804i386
+
+MENU SEPARATOR
+
+LABEL memtest
+	MENU LABEL Memtest86+ v5.01
+	KERNEL img/memtest
+
+LABEL hdt
+	MENU LABEL HDT (Hardware Detection Tool)
+	KERNEL memdisk
+	INITRD img/hdt.img
+
+LABEL ipiu
+        MENU LABEL Intel Processor Identification Utility
+        KERNEL memdisk
+        INITRD img/ipiu.img
+
+LABEL plop
+	MENU LABEL PLoP Boot Manager
+	TEXT HELP
+	Launch PLoP Boot Manager, to boot from USB and enable USB 2.0 on
+	some BIOSes that only support on 1.1, if supported by the controller.
+	ENDTEXT
+	KERNEL memdisk
+	INITRD img/plpbt.img
+
+MENU SEPARATOR
+
+LABEL -
+	LOCALBOOT 0
+	MENU LABEL Boot first hard disk
+
+LABEL -
+	LOCALBOOT 1
+	MENU LABEL Boot second hard disk

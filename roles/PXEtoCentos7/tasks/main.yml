@@ -1,0 +1,91 @@
+- name: "Installing dhcp tftp tftp-server syslinux wget nfs"
+  yum:
+          name: "{{ item }}"
+          state: installed
+  with_items:
+          - dnsmasq.x86_64
+          - tftp-server
+          - syslinux
+          - nfs-utils
+          - wget
+
+- name: "Configuring dns masq"
+  template:
+          src: dnsmasq.j2
+          dest: "/etc/dnsmasq.conf"
+          owner: root
+          group: root
+
+- name: "Configuring tftp"
+  template:
+          src: tftp.j2
+          dest: "/etc/xinetd.d/tftp"
+          owner: root
+          group: root
+
+- name: "mkdir /tftpboot"
+  file: path={{ item }} state=directory
+  with_items:
+          - /tftpboot
+          - /tftpboot/pxelinux.cfg
+          - /tftpboot/img
+          - /tftpboot/nfs
+          - /tftpboot/iso
+
+- name: "Copying syslinux on /tftpboot"
+  copy:
+          remote_src: true
+          src: "/usr/share/syslinux/{{ item }}"
+          dest: /tftpboot
+          owner: root
+          group: root
+  with_items:
+          - pxelinux.0
+          - menu.c32
+          - memdisk
+          - mboot.c32
+          - chain.c32
+
+- name: "Configuring PXE menu"
+  template:
+          src: pxemenu.j2
+          dest: /tftpboot/pxelinux.cfg/default
+          owner: root
+          group: root
+
+- name: "Configuring nfs exports"
+  template:
+          src: nfs-exports.j2
+          dest: /etc/exports
+          owner: root
+          group: root
+
+- name: "Exporting nfs share"
+  command: exportfs -rv
+
+- name: "Enable services"
+  service:
+          name: "{{ item }}"
+          enabled: yes
+  with_items:
+          - dnsmasq
+          - xinetd
+          - tftp
+          - nfs-server
+
+- name: "Starting services"
+  service:
+          name: "{{ item }}"
+          state: restarted
+  with_items:
+          - dnsmasq
+          - xinetd
+          - tftp
+          - nfs-config
+          - nfs-server
+
+- name: "Set boolean SELinux"
+  command: setsebool -P {{ item }} on
+  with_items:
+          - tftp_anon_write
+          - tftp_home_dir

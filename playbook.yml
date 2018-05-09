@@ -1,0 +1,9 @@
+- hosts: emilia
+  become: true
+  vars:
+          name_server: "Server PXE"
+          mex_dhcp: "Boot da PXE"
+          tftp_args: "-s /tftpboot"
+          tftp_disable: "no"
+  roles:
+          - PXE

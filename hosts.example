@@ -1,0 +1,2 @@
+[PXE]
+name_of_server ansible_host=server.example.com ansible_port=1234 ansible_user=user

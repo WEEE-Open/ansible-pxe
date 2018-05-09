@@ -1,0 +1,13 @@
+interface={{ interface }}
+dhcp-option=3,{{ dhcp_gateway }} # Gateway
+dhcp-option=6,{{ dhcp_dns }} # DNS
+dhcp-option=28,{{ dhcp_broadcast }} # Broadcast Address
+dhcp-option-force=66,{{ tftp_ip }} # TFTP server
+log-dhcp # More info on what's going on
+dhcp-no-override # Don't put useless fields in DHCP offer
+dhcp-range={{ dhcp_range }}
+pxe-service=X86PC, "{{ mex_dhcp }}", pxelinux # It adds the .0 by itself
+dhcp-option=vendor:PXEClient,6,2b # "kill multicast"
+#pxe-prompt="Press F8 for menu.", 60 # for test
+
+conf-dir=/etc/dnsmasq.d,.rpmnew,.rpmsave,.rpmorig

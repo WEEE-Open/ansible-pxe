@@ -1,0 +1,10 @@
+---
+
+name_server: "Emilia" 
+interface: "enp1s0" 
+dhcp_gateway: "192.168.2.1"
+dhcp_dns: "192.168.2.1,8.8.8.8"
+dhcp_broadcast: "192.168.2.255"
+dhcp_range: "192.168.2.100,192.168.2.200,255.255.255.0,24h"
+tftp_ip: "192.168.2.4"
+mex_dhcp: "Ciao da Emilia!" 
