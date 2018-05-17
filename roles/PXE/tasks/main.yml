@@ -1,4 +1,4 @@
-- name: "Installing dhcp tftp tftp-server syslinux wget nfs"
+- name: "Installing dhcp tftp-server syslinux nfs wget"
   yum:
           name: "{{ item }}"
           state: installed
@@ -63,13 +63,20 @@
 - name: "Exporting nfs share"
   command: exportfs -rv
 
+- name: "Setting boolean SELinux"
+  command: setsebool -P {{ item }} on
+  with_items:
+          - tftp_anon_write
+          - tftp_home_dir
+
+#- name: "Configuring firewall-cmd"
+
 - name: "Enable services"
   service:
           name: "{{ item }}"
           enabled: yes
   with_items:
           - dnsmasq
-          - xinetd
           - tftp
           - nfs-server
 
@@ -79,13 +86,6 @@
           state: restarted
   with_items:
           - dnsmasq
-          - xinetd
           - tftp
           - nfs-config
           - nfs-server
-
-- name: "Set boolean SELinux"
-  command: setsebool -P {{ item }} on
-  with_items:
-          - tftp_anon_write
-          - tftp_home_dir
