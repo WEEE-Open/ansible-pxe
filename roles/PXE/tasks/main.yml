@@ -69,7 +69,25 @@
           - tftp_anon_write
           - tftp_home_dir
 
-#- name: "Configuring firewall-cmd"
+- name: "Configuring firewall-cmd (interface)"
+  firewalld:
+          zone: internal
+          interface: "{{ interface }}"
+          permanent: true
+          state: enabled
+
+- name: "Configuring firewall-cmd (services)"
+  firewalld:
+          zone: internal
+          service: "{{ item }}"
+          permanent: true
+          state: enabled
+  with_items:
+          - dhcp
+          - tftp
+          - nfs
+          - rpc-bind
+          - mountd
 
 - name: "Enable services"
   service:
